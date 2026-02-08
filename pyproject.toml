@@ -1,0 +1,51 @@
+[project]
+name = "simple-rag-system"
+version = "0.1.0"
+description = "Sistema RAG para consultas inteligentes em manuais pdf de máquinas"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    # LangChain core
+    "langchain",
+    "langchain-core>=1.2.7",
+    "langchain-community",
+    "langchain-text-splitters>=1.1.0",
+    
+    # Vector store
+    "langchain-chroma",
+    "chromadb",
+    
+    # Embeddings
+    "langchain-huggingface>=1.2.0",
+    "sentence-transformers",
+    
+    # LLM providers
+    "langchain-groq>=1.1.1",
+    "langchain-google-genai>=4.2.0",
+    "langchain-ollama>=1.0.1",
+    
+    # Document loaders
+    "pypdf",
+    "beautifulsoup4",
+    "lxml",
+    
+    # Web framework
+    "fastapi>=0.128.2",
+    "uvicorn",
+    "pydantic>=2.12.5",
+    "python-multipart>=0.0.22",
+    
+    # Frontend
+    "streamlit>=1.53.0",
+    
+    # Utils
+    "python-dotenv",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.1.0",
+    "pytest-asyncio>=0.23.0",
+    "httpx>=0.27.0",
+]

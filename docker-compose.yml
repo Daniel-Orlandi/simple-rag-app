@@ -1,0 +1,60 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rag-app
+    env_file: .env
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    ports:
+      - 8000:8000
+      - 8501:8501
+    environment:
+      - API_URL=${API_URL}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - RUN_TESTS=${RUN_TESTS:-true}
+    volumes:
+      - ./data/upload:/usr/src/app/data/upload
+      - huggingface:/usr/src/app/.cache/huggingface
+    restart: unless-stopped
+    command:
+      - sh
+      - -c
+      - |
+        echo "=== Starting RAG Application ==="
+        
+        # Run tests if RUN_TESTS is true
+        if [ "$$RUN_TESTS" = "true" ]; then
+          echo "=== Running Tests ==="
+          uv run pytest tests/ -v --tb=short
+          TEST_EXIT_CODE=$$?
+          
+          if [ $$TEST_EXIT_CODE -ne 0 ]; then
+            echo "=== Tests FAILED! Exiting... ==="
+            exit 1
+          fi
+          echo "=== Tests PASSED! Starting services... ==="
+        else
+          echo "=== Skipping tests (RUN_TESTS=false) ==="
+        fi
+        
+        # Start FastAPI in background
+        uvicorn main:app --host 0.0.0.0 --port 8000 &
+        
+        # Start Streamlit in foreground
+        exec streamlit run streamlit-app.py --server.port=8501 --server.address=0.0.0.0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+volumes:
+  huggingface:

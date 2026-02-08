@@ -1,0 +1,48 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv
+venv
+env
+.eggs
+*.egg-info
+*.egg
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+.cursor
+
+# Testing
+.pytest_cache
+.coverage
+htmlcov
+
+# Build
+dist
+build
+
+# Logs
+*.log
+logs/
+
+# Local data (mount as volume instead)
+chroma_db/*
+data/upload/*
+
+# Jupyter
+.ipynb_checkpoints
+*.ipynb
+
+# Documentation
+*.md
+!README.md
