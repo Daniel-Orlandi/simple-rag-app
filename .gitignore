@@ -31,7 +31,8 @@ pyrightconfig.json
 #uv
 uv.lock
 
-#data
-data/upload/
+# data/upload: ignore contents only, keep folder
+data/upload/*
+!data/upload/.gitkeep
 
 
